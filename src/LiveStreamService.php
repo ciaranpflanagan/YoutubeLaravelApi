@@ -73,8 +73,8 @@ class LiveStreamService extends AuthService {
 				$data["tag_array"] = [];
 			}
 
-			$privacy_status = isset($data['privacy_status']) ? $data['privacy_status'] : "public";
-			$language = isset($data["language_name"]) ? $data["language_name"] : 'English';
+			$privacy_status = (empty($data['privacy_status'])) ? "public" : $data['privacy_status'];
+			$language = (empty($data['language_name'])) ? "English" : $data["language_name"];
 
 			/**
 			 * Create an object for the liveBroadcast resource [specify snippet's title, scheduled start time, and scheduled end time]
@@ -364,7 +364,7 @@ class LiveStreamService extends AuthService {
 
 			$title = $data["title"];
 			$description = $data['description'];
-			$thumbnail_path = isset($data['thumbnail_path']) ? $data['thumbnail_path'] : null;
+			$thumbnail_path = empty($data['thumbnail_path']) ? null : $data['thumbnail_path'];
 
 			/**
 			 *  parsing event start date
@@ -377,7 +377,7 @@ class LiveStreamService extends AuthService {
 			/**
 			 * parsing event end date
 			 */
-			if (isset($data['event_end_date_time'])) {
+			if (!empty($data['event_end_date_time'])) {
 				$enddt = Carbon::createFromFormat('Y-m-d H:i:s', $data['event_end_date_time'], $data['time_zone']);
 				$enddt = ($enddt < Carbon::now($data['time_zone'])) ? Carbon::now($data['time_zone']) : $enddt;
 				$enddtIso = $enddt->toIso8601String();
@@ -396,7 +396,7 @@ class LiveStreamService extends AuthService {
 			$this->googleLiveBroadcastSnippet->setDescription($description);
 			$this->googleLiveBroadcastSnippet->setScheduledStartTime($startdtIso);
 
-			if (isset($data['event_end_date_time'])) {
+			if (!empty($data['event_end_date_time'])) {
 				$this->googleLiveBroadcastSnippet->setScheduledEndTime($enddtIso);
 			}
 
@@ -429,8 +429,7 @@ class LiveStreamService extends AuthService {
 			/**
 			 * Call the API's videos.list method [retrieve the video resource]
 			 */
-			$listResponse = $youtube->videos->listVideos("snippet",
-				array('id' => $youtubeEventId));
+			$listResponse = $youtube->videos->listVideos("snippet", array('id' => $youtubeEventId));
 			$video = $listResponse[0];
 			$videoSnippet = $video['snippet'];
 			$videoSnippet['tags'] = $data['tag_array'];
