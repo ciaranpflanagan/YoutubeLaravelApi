@@ -65,7 +65,7 @@ class LiveStreamService extends AuthService {
 			$startdt = ($startdt < Carbon::now($data["time_zone"])) ? Carbon::now($data["time_zone"]) : $startdt;
 			$startdtIso = $startdt->toIso8601String();
 
-			if (count($data["tag_array"]) > 0) {
+			if (!empty($data["tag_array"])) {
 				$tags = substr(str_replace(", ,", ",", implode(',', $data["tag_array"])), 0, 498);
 				$tags = (substr($tags, -1) == ',') ? substr($tags, 0, -1) : $tags;
 				$data["tag_array"] = explode(',', $tags);
