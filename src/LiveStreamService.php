@@ -145,6 +145,8 @@ class LiveStreamService extends AuthService {
 			 */
 			$this->googleYoutubeCdnSettings->setFormat("720p");
 			$this->googleYoutubeCdnSettings->setIngestionType('rtmp');
+			$this->googleYoutubeCdnSettings->setResolution('variable');
+			$this->googleYoutubeCdnSettings->setFrameRate('variable');
 
 			/**
 			 * API request [inserts liveStream resource.]
